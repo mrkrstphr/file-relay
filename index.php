@@ -51,3 +51,5 @@ if (!file_exists($storageDir . '/' . $title)) {
 file_put_contents(
     $storageDir . '/' . $title . '/' . $number . '.png', $decodedData
 );
+
+echo "✓";
