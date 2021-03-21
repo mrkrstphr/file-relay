@@ -38,6 +38,10 @@ $storageDir = '/data';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+if (!$data) {
+    die('The server is up, but you didn\'t send any data... ¯\_(ツ)_/¯');
+}
+
 list($header, $imageSrc) = explode(',', $data['image'], 2);
 $decodedData = base64_decode($imageSrc);
 
@@ -49,7 +53,9 @@ if (!file_exists($storageDir . '/' . $title)) {
 }
 
 file_put_contents(
-    $storageDir . '/' . $title . '/' . $number . '.png', $decodedData
+    $storageDir . '/' . $title . '/' . $number .
+    (in_array(substr($number, strlen($number) - 4), $extByMime) ? '' : '.png'),
+    $decodedData
 );
 
 echo "✓";
