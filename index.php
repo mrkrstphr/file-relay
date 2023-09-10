@@ -1,5 +1,7 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
 function cors() {
     // Allow from any origin
     if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -53,10 +55,6 @@ switch (strtolower($_SERVER['REQUEST_URI'])) {
         ]);
 }
 
-function cleanUuid($input) {
-    return preg_replace("/[^A-Za-z0-9- ]/", '', $input);
-}
-
 function savePage() {
     global $map, $storageDir, $extByMime;
 
@@ -70,7 +68,7 @@ function savePage() {
     list($header, $imageSrc) = explode(',', $data['image'], 2);
     $decodedData = base64_decode($imageSrc);
 
-    $title = cleanUuid($data['title']);
+    $title = Utils::cleanUuid($data['title']);
 
     $number = str_pad($data['pageNumber'], 4, '0', STR_PAD_LEFT);
     $dir = $map[$title] ?? $title;
@@ -98,8 +96,8 @@ function saveMetadata() {
         exit;
     }
 
-    $uuid = cleanUUid($data['uuid']);
-    $slug = $data['slug'] ?? $uuid;
+    $uuid = Utils::cleanUUid($data['uuid']);
+    $slug = Utils::cleanTitle($data['slug'] ?? $uuid);
 
     $map[$uuid] = $slug;
 
@@ -113,7 +111,7 @@ function successResponse() {
     http_response_code(200);
 
     echo json_encode([
-        'done' => '✓',
+        'success' => true,
     ]);
 }
 
