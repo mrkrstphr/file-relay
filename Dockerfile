@@ -16,6 +16,9 @@ RUN mkdir -p /var/www
 COPY ./ /var/www
 WORKDIR /var/www
 
+RUN curl -s https://getcomposer.org/installer | php && \
+    php composer.phar install --no-dev --no-interaction --no-progress --no-suggest --optimize-autoloader
+
 EXPOSE 80
 VOLUME /data
 
